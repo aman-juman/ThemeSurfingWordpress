@@ -1,5 +1,7 @@
 <?php
 
+/* Подключение стилей и скриптов */
+
 function surfing_scripts() {
 	wp_enqueue_style( 'surfing-style', get_stylesheet_uri() );
   wp_enqueue_style( 'surfing-gfonts', 'https://fonts.googleapis.com/css?family=Fira+Sans|Playfair+Display:400,700|Poppins:300&display=swap' );
@@ -31,22 +33,55 @@ function surfing_scripts() {
          get_template_directory_uri() . '/js/shop-slider.js',
          array('jquery', 'owlCarousel'), '',true
        );
-
-
-
-
-
-
-
-
-	// wp_style_add_data( 'surfing-style', 'rtl', 'replace' );
-  //
-	// wp_enqueue_script( 'surfing-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
-  //
-	// wp_enqueue_script( 'surfing-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), _S_VERSION, true );
-  //
-	// if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-	// 	wp_enqueue_script( 'comment-reply' );
-	// }
 }
 add_action( 'wp_enqueue_scripts', 'surfing_scripts' );
+
+
+/* Регистрация кастомного типапостов с Бордами */
+add_action('init', 'register_post_types');
+function register_post_types(){
+	register_post_type('boards', array(
+		'labels'             => array(
+			'name'               => 'Борды', // Основное название типа записи
+			'singular_name'      => 'Борд', // отдельное название записи типа Book
+			'add_new'            => 'Добавить новую',
+			'add_new_item'       => 'Добавить новую борд',
+			'edit_item'          => 'Редактировать борд',
+			'new_item'           => 'Новая борд',
+			'view_item'          => 'Посмотреть борд',
+			'search_items'       => 'Найти борд',
+			'not_found'          =>  'Бордов не найдено',
+			'not_found_in_trash' => 'В корзине борд не найдено',
+			'parent_item_colon'  => '',
+			'menu_name'          => 'Борды'
+
+		  ),
+		'public'             => true,
+		'publicly_queryable' => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'query_var'          => true,
+		'rewrite'            => true,
+		'capability_type'    => 'post',
+		'has_archive'        => true,
+		'hierarchical'       => false,
+		'menu_position'      => null,
+		'supports'           => array(
+																	'title',
+																	//'editor',
+																	//'author',
+																	'thumbnail',
+																	//'excerpt',
+																	//'comments'
+																)
+	) );
+}
+
+/* Поддержка картинок превью для постов */
+add_theme_support( 'post-thumbnails' );
+
+
+
+ if (function_exists('add_image_size')){
+	 add_image_size('board-slider', 225, 490, true);
+ }
